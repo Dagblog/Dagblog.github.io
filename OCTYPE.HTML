@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선택 결과 요약</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .statistics {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .summary {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>질문에 답하세요</h1>
+    <p id="question">어떤 선택을 하시겠습니까?</p>
+    <button id="option1">선택지 1: 산으로 가기</button>
+    <button id="option2">선택지 2: 바다로 가기</button>
+
+    <!-- 선택 결과와 실시간 통계를 함께 표시 -->
+    <div id="liveStatistics" class="statistics">
+        <h3>현재까지의 통계</h3>
+        <p id="liveSummary">아직 선택된 결과가 없습니다.</p>
+        <p id="lastChoice" class="summary"></p>
+    </div>
+
+    <script>
+        // 선택 카운트를 저장할 객체
+        const choices = {
+            option1: 0, // "산으로 가기" 선택 수
+            option2: 0  // "바다로 가기" 선택 수
+        };
+
+        // HTML 요소
+        const questionElement = document.getElementById('question');
+        const option1Button = document.getElementById('option1');
+        const option2Button = document.getElementById('option2');
+        const liveSummaryElement = document.getElementById('liveSummary');
+        const lastChoiceElement = document.getElementById('lastChoice');
+
+        // 선택지 클릭 이벤트 핸들러
+        option1Button.addEventListener('click', () => {
+            updateChoices('option1', '산으로 가는 것을 선택했습니다. 자연을 즐기며 힐링할 수 있겠네요!');
+        });
+
+        option2Button.addEventListener('click', () => {
+            updateChoices('option2', '바다로 가는 것을 선택했습니다. 시원한 바람과 파도 소리가 기다리고 있군요!');
+        });
+
+        // 선택 업데이트 함수
+        function updateChoices(choice, summary) {
+            // 선택 카운트 증가
+            choices[choice]++;
+            updateLiveStatistics(); // 실시간 통계 업데이트
+            displayLastChoice(summary); // 마지막 선택 요약 표시
+        }
+
+        // 실시간 통계 업데이트 함수
+        function updateLiveStatistics() {
+            const total = choices.option1 + choices.option2;
+            if (total === 0) {
+                liveSummaryElement.textContent = '아직 선택된 결과가 없습니다.';
+                return;
+            }
+
+            const option1Percentage = ((choices.option1 / total) * 100).toFixed(2);
+            const option2Percentage = ((choices.option2 / total) * 100).toFixed(2);
+
+            liveSummaryElement.textContent = `
+                선택지 1(산으로 가기): ${choices.option1}명 (${option1Percentage}%),
+                선택지 2(바다로 가기): ${choices.option2}명 (${option2Percentage}%)
+            `;
+        }
+
+        // 마지막 선택 요약 표시 함수
+        function displayLastChoice(summary) {
+            lastChoiceElement.textContent = `최근 선택: ${summary}`;
+        }
+
+        // 초기 통계 표시
+        updateLiveStatistics();
+    </script>
+</body>
+</html>
